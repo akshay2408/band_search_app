@@ -79,6 +79,8 @@ test:
 #
 production:
   <<: *default
-  database: band_search_app_production
-  username: band_search_app
-  password: <%= ENV["BAND_SEARCH_APP_DATABASE_PASSWORD"] %>
+  url: <%= ENV["DATABASE_URL"] %>
+  database: render_deploy_production
+  username: render_deploy
+  password: <%= ENV["RENDER_DEPLOY_DATABASE_PASSWORD"] %>
+
