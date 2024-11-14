@@ -2,9 +2,6 @@ require 'httparty'
 
 class BandSearchService
   MUSICBRAINZ_API_URL = "https://musicbrainz.org/ws/2/artist"
-  CUSTOM_USER_AGENT = "band_finder_app/1.0 (useremail@example.com)"
-  MAX_YEAR_DIFF = 1000
-  MAX_BANDS = 50
 
   class << self
     def get_bands_by_location(city)
@@ -27,10 +24,10 @@ class BandSearchService
 
     def fetch_bands_by_location(city)
       url = build_musicbrainz_url(city)
-      response = HTTParty.get(url, headers: { "User-Agent" => CUSTOM_USER_AGENT })
+      response = HTTParty.get(url, headers: { "User-Agent" => "band_finder_app/1.0 (useremail@example.com)" })
       return [] unless response.success?
 
-      response.parsed_response['artists'].first(MAX_BANDS)
+      response.parsed_response['artists'].first(50)
     rescue HTTParty::Error => e
       log_error(e, "Error fetching data from MusicBrainz API for city: #{city}")
       []
@@ -43,7 +40,7 @@ class BandSearchService
     def filter_recent_bands(bands)
       bands.select do |band|
         formation_date = band.dig('life-span', 'begin')
-        formation_date && formation_date.to_i >= (Time.now.year - MAX_YEAR_DIFF)
+        formation_date && formation_date.to_i >= (Time.now.year - 10)
       end
     end
 
