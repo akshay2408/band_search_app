@@ -40,7 +40,7 @@ class BandSearchService
     def filter_recent_bands(bands)
       bands.select do |band|
         formation_date = band.dig('life-span', 'begin')
-        formation_date && formation_date.to_i >= (Time.now.year - 10)
+        formation_date && formation_date.to_i >= (Time.now.year - 1000)
       end
     end
 
